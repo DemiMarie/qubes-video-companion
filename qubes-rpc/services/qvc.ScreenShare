@@ -8,8 +8,8 @@ set -eu
 ## DISPLAY variable used by: xrandr, zenity
 export DISPLAY=:0
 
-true "${XDG_RUNTIME_DIR:="/run/user/$(id -u)"}"
-true "${DBUS_SESSION_BUS_ADDRESS:="unix:path=${XDG_RUNTIME_DIR}/bus"}"
+: "${XDG_RUNTIME_DIR:="/run/user/$(id -u)"}"
+: "${DBUS_SESSION_BUS_ADDRESS:="unix:path=${XDG_RUNTIME_DIR}/bus"}"
 monitors="$(xrandr --listactivemonitors \
             | awk '/^ [0-9]+: \+/ { print "FALSE", $4, $3 }')"
 monitor_count="$(echo "${monitors}" | wc -l)"
@@ -25,7 +25,7 @@ if test "${monitor_count}" -gt 1; then
     --text "Select monitor to present to qube ${QREXEC_REMOTE_DOMAIN}" \
     ${monitors})"
 fi
-true "${QVC_MONITOR:=}"
+: "${QVC_MONITOR:=}"
 
 export XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS QVC_MONITOR
 exec python3 -- /usr/share/qubes-video-companion/sender/screenshare.py

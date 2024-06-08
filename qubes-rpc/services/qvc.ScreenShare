@@ -8,7 +8,9 @@ set -eu
 ## DISPLAY variable used by: xrandr, zenity
 export DISPLAY=:0
 
-: "${XDG_RUNTIME_DIR:="/run/user/$(id -u)"}"
+if [ -z "${XDG_RUNTIME_DIR:+test}" ]; then
+    XDG_RUNTIME_DIR="/run/user/$(id -u)"
+fi
 : "${DBUS_SESSION_BUS_ADDRESS:="unix:path=${XDG_RUNTIME_DIR}/bus"}"
 monitors="$(xrandr --listactivemonitors \
             | awk '/^ [0-9]+: \+/ { print "FALSE", $4, $3 }')"
